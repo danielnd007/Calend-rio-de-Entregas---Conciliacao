@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendário de Entregas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f4f8fc;--card:#ffffff;--text:#102033;--muted:#6b7a90;--primary:#1667d9;--primary2:#0b4aa2;--line:#dce7f3;--red:#ef4444;--orange:#f97316;--yellow:#eab308;--green:#22c55e;--blue:#3b82f6;--shadow:0 14px 35px rgba(16,32,51,.10);}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#f7fbff,#edf5ff);color:var(--text)}
+    .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.side{background:#092a5e;color:#fff;padding:28px 22px;position:sticky;top:0;height:100vh}.brand{display:flex;gap:12px;align-items:center;margin-bottom:28px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#60a5fa,#1d4ed8);display:grid;place-items:center;font-size:23px;font-weight:800}.brand h1{font-size:18px;line-height:1.2;margin:0}.brand span{font-size:12px;color:#b8d5ff}.nav button{width:100%;border:0;background:transparent;color:#d8e9ff;text-align:left;padding:13px 14px;border-radius:13px;margin:4px 0;font-weight:700;cursor:pointer}.nav button.active,.nav button:hover{background:rgba(255,255,255,.13);color:#fff}.hint{margin-top:28px;border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:14px;color:#c7dbf8;font-size:13px;line-height:1.45}.main{padding:26px 32px}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:22px}.title h2{margin:0 0 6px;font-size:30px}.title p{margin:0;color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:11px 14px;background:var(--primary);color:#fff;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(22,103,217,.20)}.btn.secondary{background:#fff;color:#15345a;border:1px solid var(--line);box-shadow:none}.btn.danger{background:#ef4444}.grid-kpi{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:14px;margin-bottom:18px}.kpi{background:var(--card);padding:18px;border-radius:20px;box-shadow:var(--shadow);border:1px solid #edf3fa}.kpi small{color:var(--muted);font-weight:700}.kpi strong{display:block;font-size:30px;margin-top:8px}.filters{background:var(--card);border:1px solid #edf3fa;border-radius:20px;padding:16px;box-shadow:var(--shadow);display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:18px}.filters input,.filters select{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px;font:inherit;background:#fff}.card{background:var(--card);border:1px solid #edf3fa;border-radius:22px;box-shadow:var(--shadow);padding:18px}.calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.month-title{font-weight:900;font-size:22px}.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.dow{font-size:12px;color:var(--muted);font-weight:900;text-align:center;padding:8px}.day{min-height:126px;border:1px solid var(--line);border-radius:16px;background:#fbfdff;padding:8px;overflow:hidden}.day.out{opacity:.34}.day.today{outline:3px solid rgba(22,103,217,.22);background:#f2f7ff}.day-num{font-weight:900;margin-bottom:6px}.event{font-size:11px;line-height:1.25;border-radius:10px;padding:6px 7px;margin:4px 0;color:#fff;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.status-vencido{background:var(--red)}.status-hoje{background:var(--orange)}.status-proximo{background:var(--yellow);color:#1e293b}.status-ok{background:var(--green)}.status-futuro{background:var(--blue)}.alert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.alert-col h3{margin:0 0 12px}.alert-item{border:1px solid var(--line);border-left:6px solid var(--blue);border-radius:16px;padding:12px;margin-bottom:10px;background:#fff}.alert-item.red{border-left-color:var(--red)}.alert-item.orange{border-left-color:var(--orange)}.alert-item.yellow{border-left-color:var(--yellow)}.alert-item.green{border-left-color:var(--green)}.alert-item b{display:block}.alert-item span{font-size:12px;color:var(--muted)}table{width:100%;border-collapse:collapse}th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{color:#53677f;font-size:12px;text-transform:uppercase;background:#f8fbff}.pill{display:inline-flex;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:900}.pill.red{background:#fee2e2;color:#991b1b}.pill.orange{background:#ffedd5;color:#9a3412}.pill.yellow{background:#fef9c3;color:#854d0e}.pill.green{background:#dcfce7;color:#166534}.pill.blue{background:#dbeafe;color:#1e40af}.hidden{display:none!important}.modal-bg{position:fixed;inset:0;background:rgba(3,12,28,.58);display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modal{width:min(620px,100%);background:#fff;border-radius:22px;padding:22px;box-shadow:0 25px 80px rgba(0,0,0,.25)}.modal h3{margin-top:0}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-grid label{font-size:12px;font-weight:800;color:var(--muted)}.form-grid input,.form-grid select,.form-grid textarea{width:100%;margin-top:6px;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit}.full{grid-column:1/-1}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}.empty{color:var(--muted);font-size:13px;padding:14px;text-align:center}.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px}.bar{display:grid;grid-template-columns:150px 1fr 56px;gap:10px;align-items:center;margin:10px 0}.track{height:12px;background:#e8f0fa;border-radius:999px;overflow:hidden}.fill{height:100%;background:var(--primary);border-radius:999px}@media(max-width:1050px){.app{grid-template-columns:1fr}.side{height:auto;position:relative}.grid-kpi{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr}.alert-grid,.charts{grid-template-columns:1fr}.main{padding:20px}.day{min-height:105px}}@media(max-width:700px){.cal-grid{gap:4px}.day{min-height:92px;padding:5px}.event{font-size:10px}.top{display:block}.actions{margin-top:14px}.grid-kpi{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="side"><div class="brand"><div class="logo">✓</div><div><h1>Controle de Entregas</h1><span>Relatórios por cliente</span></div></div><nav class="nav"><button class="active" data-view="calendario">📅 Calendário</button><button data-view="alertas">🚨 Alertas</button><button data-view="dashboard">📊 Dashboard</button><button data-view="lista">🔎 Lista de Clientes</button><button data-view="config">⚙️ Configuração</button></nav><div class="hint"><b>Regra de alerta</b><br>Vencido: data menor que hoje.<br>Vence hoje: data igual a hoje.<br>Prazo acabando: próximos 3 dias.</div></aside>
+    <main class="main"><div class="top"><div class="title"><h2 id="pageTitle">Calendário de Entregas</h2><p id="pageSub">Acompanhe prazos, responsáveis e relatórios pendentes.</p></div><div class="actions"><button class="btn secondary" id="prevMonth">← Mês anterior</button><button class="btn secondary" id="todayBtn">Hoje</button><button class="btn secondary" id="nextMonth">Próximo mês →</button><button class="btn" id="exportBtn">Exportar CSV</button></div></div>
+    <section class="grid-kpi"><div class="kpi"><small>Total clientes</small><strong id="kpiTotal">0</strong></div><div class="kpi"><small>Vencidos</small><strong id="kpiVencidos">0</strong></div><div class="kpi"><small>Vencem hoje</small><strong id="kpiHoje">0</strong></div><div class="kpi"><small>Próx. 3 dias</small><strong id="kpiProx">0</strong></div><div class="kpi"><small>Entregues</small><strong id="kpiEntregues">0</strong></div></section>
+    <section class="filters"><input id="search" placeholder="Pesquisar cliente, responsável ou grupo..."><select id="respFilter"><option value="">Todos responsáveis</option></select><select id="statusFilter"><option value="">Todos status</option><option>Pendente</option><option>Entregue</option></select><select id="grupoFilter"><option value="">Todos grupos</option></select></section>
+    <section id="view-calendario" class="view"><div class="card"><div class="calendar-head"><div class="month-title" id="monthTitle"></div><small>Clique em uma entrega para atualizar status/observação</small></div><div class="cal-grid" id="calendar"></div></div></section>
+    <section id="view-alertas" class="view hidden"><div class="alert-grid"><div class="card alert-col"><h3>🔴 Vencidos</h3><div id="alertVencidos"></div></div><div class="card alert-col"><h3>🟠 Vencem hoje</h3><div id="alertHoje"></div></div><div class="card alert-col"><h3>🟡 Próx. 3 dias</h3><div id="alertProx"></div></div><div class="card alert-col"><h3>🟢 Entregues</h3><div id="alertEntregues"></div></div></div></section>
+    <section id="view-dashboard" class="view hidden"><div class="charts"><div class="card"><h3>Entregas por responsável</h3><div id="chartResp"></div></div><div class="card"><h3>Status geral</h3><div id="chartStatus"></div></div></div></section>
+    <section id="view-lista" class="view hidden"><div class="card"><table><thead><tr><th>Cliente</th><th>Responsável</th><th>Grupo</th><th>Data entrega</th><th>Status prazo</th><th>Ação</th></tr></thead><tbody id="tableBody"></tbody></table></div></section>
+    <section id="view-config" class="view hidden"><div class="card"><h3>Configuração com Google Sheets</h3><p>Esta versão já funciona com os dados da planilha. Para atualizar automaticamente via Google Sheets, publique o Apps Script abaixo como Web App e cole a URL no campo do código JavaScript indicado no arquivo.</p><ol><li>Abra sua planilha no Google Sheets.</li><li>Vá em Extensões → Apps Script.</li><li>Cole o arquivo <b>apps-script.gs</b>.</li><li>Implante como Web App com acesso “Qualquer pessoa com o link”.</li><li>No arquivo <b>script.js</b>, preencha a variável <b>GOOGLE_SHEETS_API_URL</b>.</li></ol></div></section>
+    </main>
+  </div>
+  <div class="modal-bg" id="modalBg"><div class="modal"><h3>Atualizar entrega</h3><div class="form-grid"><label>Cliente<input id="mEmpresa" disabled></label><label>Responsável<input id="mResp" disabled></label><label>Data de entrega<input id="mData" type="date"></label><label>Status<select id="mStatus"><option>Pendente</option><option>Entregue</option></select></label><label class="full">Observação<textarea id="mObs" rows="3" placeholder="Ex: relatório enviado, aguardando retorno, pendência..."></textarea></label></div><div class="modal-actions"><button class="btn secondary" id="closeModal">Cancelar</button><button class="btn" id="saveModal">Salvar</button></div></div></div>
+  <script>
+const BASE_ENTREGAS = [
+  {
+    "id": 1,
+    "empresa": "99 VIAGENS",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "4",
+    "dataEntrega": "2025-01-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 2,
+    "empresa": "ALMAP",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "2025-07-15",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 3,
+    "empresa": "AMMANN DO BRASIL",
+    "responsavel": "BEATRIZ CARDOSO",
+    "grupo": "2",
+    "dataEntrega": "2026-06-30",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 4,
+    "empresa": "AMSTED",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "1",
+    "dataEntrega": "2025-01-17",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 5,
+    "empresa": "APS COMPONENTES",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "2025-04-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 6,
+    "empresa": "GRUPO SGS ENGER",
+    "responsavel": "JANY SOUZA",
+    "grupo": "3",
+    "dataEntrega": "2026-06-15",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 7,
+    "empresa": "GRUPO SGS INDUSTRIAL",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "3",
+    "dataEntrega": "2026-06-15",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 8,
+    "empresa": "BAIN COMPANY",
+    "responsavel": "ENDREW RAUCCI",
+    "grupo": "4",
+    "dataEntrega": "2025-05-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 9,
+    "empresa": "ISS MARINE",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "2",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 10,
+    "empresa": "LOUNGERIE",
+    "responsavel": "JENIFFER SILVA",
+    "grupo": "3",
+    "dataEntrega": "2026-06-03",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 11,
+    "empresa": "BRASIL PLURAL",
+    "responsavel": "BEATRIZ LINO",
+    "grupo": "3",
+    "dataEntrega": "2025-07-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 12,
+    "empresa": "CARREFOUR",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 13,
+    "empresa": "MAKRO",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "1",
+    "dataEntrega": "2026-06-05",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 14,
+    "empresa": "NÚCLEO ENGENHARIA",
+    "responsavel": "JENIFFER SILVA",
+    "grupo": "",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 15,
+    "empresa": "SKF",
+    "responsavel": "MICAELE ALVES",
+    "grupo": "4",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 16,
+    "empresa": "VIBRA ENERGIA VENC 05",
+    "responsavel": "BEATRIZ CARDOSO",
+    "grupo": "1",
+    "dataEntrega": "2026-06-03",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 17,
+    "empresa": "ATACADÃO",
+    "responsavel": "DANIELE LISBOA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 18,
+    "empresa": "GRUPO SGS BRASIL",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "3",
+    "dataEntrega": "2026-06-15",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 19,
+    "empresa": "LG PROMOTORES",
+    "responsavel": "BEATRIZ CARDOSO",
+    "grupo": "4",
+    "dataEntrega": "2026-06-10",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 20,
+    "empresa": "LG ELETRONICS",
+    "responsavel": "BEATRIZ CARDOSO",
+    "grupo": "4",
+    "dataEntrega": "2026-06-10",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 21,
+    "empresa": "BUREAU VERITAS",
+    "responsavel": "ENDREW RAUCCI",
+    "grupo": "4",
+    "dataEntrega": "2024-12-11",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 22,
+    "empresa": "PERNAMBUCANAS",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 23,
+    "empresa": "SAPURA",
+    "responsavel": "JENNIFER SILVA",
+    "grupo": "2",
+    "dataEntrega": "2026-02-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 24,
+    "empresa": "CART - CONCESSIONARIA AUTO RAPOSO TAVARES S.A.",
+    "responsavel": "CAMYLLA SANTOS",
+    "grupo": "2",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 25,
+    "empresa": "CBRE",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "4",
+    "dataEntrega": "2025-02-12",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 26,
+    "empresa": "CIP",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "2025-01-15",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 27,
+    "empresa": "TRANSOCEAN",
+    "responsavel": "BRENDA COSTA",
+    "grupo": "4",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 28,
+    "empresa": "COFCO AGRI",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 29,
+    "empresa": "COFCO BRASIL",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 30,
+    "empresa": "COFCO COTTON",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 31,
+    "empresa": "COFCO INTL",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 32,
+    "empresa": "COFCO TEC",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 33,
+    "empresa": "COFCO TERMINAL 12",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 34,
+    "empresa": "COLOPLAST",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 35,
+    "empresa": "ZODIAC",
+    "responsavel": "JANY SOUZA",
+    "grupo": "1",
+    "dataEntrega": "2026-04-15",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 36,
+    "empresa": "CONCREMAT",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "4",
+    "dataEntrega": "2025-08-25",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 37,
+    "empresa": "ISDIN",
+    "responsavel": "JENIFFER SILVA",
+    "grupo": "1",
+    "dataEntrega": "2025-11-11",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 38,
+    "empresa": "BENTHIC DO BRASIL",
+    "responsavel": "BEATRIZ CARDOSO",
+    "grupo": "1",
+    "dataEntrega": "2026-06-11",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 39,
+    "empresa": "GRUPO AVANTE - CDA LOGISTICA",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "3",
+    "dataEntrega": "2025-10-13",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 40,
+    "empresa": "CPFL",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "Não cai débitos",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 41,
+    "empresa": "DB SCHENKER DO BRASIL",
+    "responsavel": "BEATRIZ CARDOSO",
+    "grupo": "3",
+    "dataEntrega": "2025-08-14",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 42,
+    "empresa": "EIXO SP",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 43,
+    "empresa": "ENTREVIAS",
+    "responsavel": "ENDREW RAUCCI",
+    "grupo": "4",
+    "dataEntrega": "2024-11-13",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 44,
+    "empresa": "FABER CASTELL",
+    "responsavel": "DANIELE LISBOA",
+    "grupo": "2",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 45,
+    "empresa": "GASPETRO",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "Não cai débitos",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 46,
+    "empresa": "GRUPO AVANTE - GSM MINERAÇÃO",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "3",
+    "dataEntrega": "2025-10-13",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 47,
+    "empresa": "GRUPO AVANTE - MINERAÇÃO FERRO PURO",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "3",
+    "dataEntrega": "2025-10-13",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 48,
+    "empresa": "SAIPEM RJ",
+    "responsavel": "BEATRIZ CARDOSO",
+    "grupo": "3",
+    "dataEntrega": "2026-06-16",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 49,
+    "empresa": "SEADRILL AURIGA",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "1",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 50,
+    "empresa": "SEADRILL CARINA",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "1",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 51,
+    "empresa": "SEADRILL JUPITER",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "1",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 52,
+    "empresa": "SEADRILL POLARIS",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "1",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 53,
+    "empresa": "SEADRILL SATURN",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "2",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 54,
+    "empresa": "GRUPO COSAN - LOCAÇÃO RAIZEN",
+    "responsavel": "MARINA SANTANA",
+    "grupo": "1",
+    "dataEntrega": "2024-12-11",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 55,
+    "empresa": "GRUPO COSAN - LOCAÇÃO RAIZEN ITAÚ",
+    "responsavel": "MARINA SANTANA",
+    "grupo": "1",
+    "dataEntrega": "2025-03-12",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 56,
+    "empresa": "GRUPO COSAN - LOCAÇÃO REDE INTEGRADA",
+    "responsavel": "MARINA SANTANA",
+    "grupo": "1",
+    "dataEntrega": "2025-03-12",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 57,
+    "empresa": "KONGSBERG",
+    "responsavel": "DANIEL LOPES",
+    "grupo": "1",
+    "dataEntrega": "2026-06-19",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 58,
+    "empresa": "GRUPO COSAN - LOCAÇÃO RUMO",
+    "responsavel": "MARINA SANTANA",
+    "grupo": "1",
+    "dataEntrega": "2025-02-17",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 59,
+    "empresa": "GRUPO COSAN - LOCAÇÃO RUMO ITAÚ",
+    "responsavel": "MARINA SANTANA",
+    "grupo": "1",
+    "dataEntrega": "2025-04-11",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 60,
+    "empresa": "GRUPO COSAN - MOOVE",
+    "responsavel": "ENDREW RAUCCI",
+    "grupo": "4",
+    "dataEntrega": "2024-12-17",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 61,
+    "empresa": "GRUPO COSAN - RAIZEN",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "1",
+    "dataEntrega": "2025-04-11",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 62,
+    "empresa": "GRUPO COSAN - REDE INTEGRADA",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "1",
+    "dataEntrega": "2025-05-12",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 63,
+    "empresa": "GRUPO COSAN - RUMO MALHA NORTE",
+    "responsavel": "KELLY NASCIMENTO",
+    "grupo": "1",
+    "dataEntrega": "2025-03-17",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 64,
+    "empresa": "GRUPO CSN",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "2024-05-07",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 65,
+    "empresa": "GRUPO ELDORADO",
+    "responsavel": "JENIFFER SILVA",
+    "grupo": "1",
+    "dataEntrega": "Saiu",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 66,
+    "empresa": "SEADRILL TELLUS",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "1",
+    "dataEntrega": "2026-06-09",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 67,
+    "empresa": "TOZZINI FREIRE",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "2",
+    "dataEntrega": "2026-06-15",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 68,
+    "empresa": "FINI COMERCIALIZADORA",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "2",
+    "dataEntrega": "2026-02-17",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 69,
+    "empresa": "GRUPO GRSA",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "2025-05-19",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 70,
+    "empresa": "GRUPO NC",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "1",
+    "dataEntrega": "2025-01-24",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 71,
+    "empresa": "GRUPO OBA",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 72,
+    "empresa": "VCT BRASIL",
+    "responsavel": "JENIFFER SILVA",
+    "grupo": "1",
+    "dataEntrega": "2026-06-16",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 73,
+    "empresa": "VEDACIT - 910",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "1",
+    "dataEntrega": "2026-06-16",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 74,
+    "empresa": "VEDACIT - 950",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "1",
+    "dataEntrega": "2026-06-16",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 75,
+    "empresa": "INGRAM",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 76,
+    "empresa": "VEDACIT - 960",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "1",
+    "dataEntrega": "2026-06-16",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 77,
+    "empresa": "PRUDENTIAL  SEGURO DE VIDA",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-19",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 78,
+    "empresa": "PRUDENTIAL VIDA EM GRUPO",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-19",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 79,
+    "empresa": "KOMATSU",
+    "responsavel": "JEAN SENA",
+    "grupo": "2",
+    "dataEntrega": "2025-07-17",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 80,
+    "empresa": "LEFOSSE ADVOGADOS",
+    "responsavel": "DANIELE LISBOA",
+    "grupo": "2",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 81,
+    "empresa": "LEMASA",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 82,
+    "empresa": "MESSER GASES",
+    "responsavel": "DANIELE LISBOA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-19",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 83,
+    "empresa": "OCEANEERING",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "2",
+    "dataEntrega": "2026-06-16",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 84,
+    "empresa": "LIBERTY SEGUROS",
+    "responsavel": "JEAN SENA",
+    "grupo": "2",
+    "dataEntrega": "2024-12-20",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 85,
+    "empresa": "COMBA TELECOM",
+    "responsavel": "ENDREW RAUCCI",
+    "grupo": "4",
+    "dataEntrega": "2026-05-21",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 86,
+    "empresa": "SIKA",
+    "responsavel": "DANIELE LISBOA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-08",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 87,
+    "empresa": "WAVIN",
+    "responsavel": "AMANDA MARTILIANO",
+    "grupo": "2",
+    "dataEntrega": "2026-06-10",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 88,
+    "empresa": "CONSPIRAÇÃO FILMES",
+    "responsavel": "JENIFFER SILVA",
+    "grupo": "1",
+    "dataEntrega": "2026-06-16",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 89,
+    "empresa": "FINI FRANQUIAS",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "2",
+    "dataEntrega": "2026-06-25",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 90,
+    "empresa": "FINI SANCHEZ CANO",
+    "responsavel": "ISABELA RIBEIRO",
+    "grupo": "2",
+    "dataEntrega": "2026-06-25",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 91,
+    "empresa": "MAGAZINE LUIZA",
+    "responsavel": "JEAN SENA",
+    "grupo": "2",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 92,
+    "empresa": "MRN",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "2",
+    "dataEntrega": "2026-06-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 93,
+    "empresa": "MATEC",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 94,
+    "empresa": "QUINTO ANDAR",
+    "responsavel": "JANY SOUZA",
+    "grupo": "1",
+    "dataEntrega": "2026-06-19",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 95,
+    "empresa": "SUMITOMO",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "2",
+    "dataEntrega": "2026-05-20",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 96,
+    "empresa": "NORTE ENERGIA",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "4",
+    "dataEntrega": "2026-06-01",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 97,
+    "empresa": "SOFTYS",
+    "responsavel": "BRENDA COSTA",
+    "grupo": "4",
+    "dataEntrega": "2025-12-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 98,
+    "empresa": "GRUPO BIG - BOM PREÇO BAHIA",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-01-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 99,
+    "empresa": "ODATA",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 100,
+    "empresa": "PANASONIC",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "2",
+    "dataEntrega": "2025-08-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 101,
+    "empresa": "PARANAPANEMA BAHIA",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 102,
+    "empresa": "PARANAPANEMA SP",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 103,
+    "empresa": "PASA",
+    "responsavel": "JEAN SENA",
+    "grupo": "2",
+    "dataEntrega": "2025-06-17",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 104,
+    "empresa": "GRUPO BIG - BOM PREÇO NORDESTE",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-01-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 105,
+    "empresa": "GRUPO BIG - TRANSPORTADORA",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-01-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 106,
+    "empresa": "GRUPO BIG - WMB",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-24",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 107,
+    "empresa": "GRUPO BIG - WMS",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-02-25",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 108,
+    "empresa": "LOG-IN - LOGISTICA INTERMODAL",
+    "responsavel": "DANIELE LISBOA",
+    "grupo": "1",
+    "dataEntrega": "2026-04-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 109,
+    "empresa": "LOG-IN MARITIMA CABOTAGEM",
+    "responsavel": "DANIELE LISBOA",
+    "grupo": "1",
+    "dataEntrega": "2026-04-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 110,
+    "empresa": "LOG-IN NAVEGACAO",
+    "responsavel": "DANIELE LISBOA",
+    "grupo": "1",
+    "dataEntrega": "2026-04-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 111,
+    "empresa": "LOG-IN T V V - TERMINAL DE VILA VELHA S.A",
+    "responsavel": "DANIELE LISBOA",
+    "grupo": "1",
+    "dataEntrega": "2026-04-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 112,
+    "empresa": "SAIPEM ES",
+    "responsavel": "BEATRIZ CARDOSO",
+    "grupo": "3",
+    "dataEntrega": "2026-02-13",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 113,
+    "empresa": "LUBRIZOL",
+    "responsavel": "BRENDA COSTA",
+    "grupo": "1",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 114,
+    "empresa": "STEFANINI",
+    "responsavel": "BRENDA COSTA",
+    "grupo": "3",
+    "dataEntrega": "2026-05-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 115,
+    "empresa": "SCHULZ",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 116,
+    "empresa": "BANCO CSF",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "2",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 117,
+    "empresa": "GRUPO BRINKS - ADM MATRIZ",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "4",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 118,
+    "empresa": "GRUPO BRINKS - BELO HORIZONTE",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "4",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 119,
+    "empresa": "GRUPO BRINKS - BRINKS VALORES AGREGADOS",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "4",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 120,
+    "empresa": "GRUPO BRINKS - BSL BRINKS SOLUCOES LOGIST",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "4",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 121,
+    "empresa": "GRUPO BRINKS - E-PAGO TECNOLOGIA",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "4",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 122,
+    "empresa": "SEVENTH",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 123,
+    "empresa": "GRUPO BRINKS - GLOBAL SERVICES",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "4",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 124,
+    "empresa": "GRUPO BRINKS - MUITOFACIL ARRECAD E RECEB",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "4",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 125,
+    "empresa": "GRUPO BRINKS - SEG TRANSPORTES REG 1",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "4",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 126,
+    "empresa": "GRUPO BRINKS - SEG TRANSPORTES REG 2",
+    "responsavel": "ALLINE SANTOS",
+    "grupo": "4",
+    "dataEntrega": "2026-06-22",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 127,
+    "empresa": "ATKINS",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "4",
+    "dataEntrega": "2026-06-25",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 128,
+    "empresa": "PIERRE FABRE",
+    "responsavel": "ENDREW RAUCCI",
+    "grupo": "2",
+    "dataEntrega": "2026-06-29",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 129,
+    "empresa": "C&A MODAS S.A.",
+    "responsavel": "LAURA EVANGELISTA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-03",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 130,
+    "empresa": "POSITIVO MARIA MÉLIA",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "3",
+    "dataEntrega": "2025-11-03",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 131,
+    "empresa": "TUPY",
+    "responsavel": "BRUNA ARAUJO",
+    "grupo": "4",
+    "dataEntrega": "-",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 132,
+    "empresa": "UOL BOA COMPRA",
+    "responsavel": "AMANDA MARTILIANO",
+    "grupo": "1",
+    "dataEntrega": "2024-10-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 133,
+    "empresa": "UOL CIATECH",
+    "responsavel": "AMANDA MARTILIANO",
+    "grupo": "1",
+    "dataEntrega": "2024-10-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 134,
+    "empresa": "UOL COMPASSO",
+    "responsavel": "AMANDA MARTILIANO",
+    "grupo": "1",
+    "dataEntrega": "2024-10-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 135,
+    "empresa": "UOL CURSOS",
+    "responsavel": "AMANDA MARTILIANO",
+    "grupo": "1",
+    "dataEntrega": "2024-10-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 136,
+    "empresa": "UOL PAGSEGURO",
+    "responsavel": "AMANDA MARTILIANO",
+    "grupo": "1",
+    "dataEntrega": "2024-10-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 137,
+    "empresa": "UOL TILIX",
+    "responsavel": "AMANDA MARTILIANO",
+    "grupo": "1",
+    "dataEntrega": "2024-10-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 138,
+    "empresa": "UOL UNIVERSO ONLINE",
+    "responsavel": "AMANDA MARTILIANO",
+    "grupo": "1",
+    "dataEntrega": "2024-10-18",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 139,
+    "empresa": "POSITIVO POSIGRAF",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "3",
+    "dataEntrega": "2026-01-07",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 140,
+    "empresa": "POSITIVO EDUCACIONAL",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "3",
+    "dataEntrega": "2026-01-07",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 141,
+    "empresa": "CMPC CELULOSE",
+    "responsavel": "BRENDA COSTA",
+    "grupo": "1",
+    "dataEntrega": "2026-05-29",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 142,
+    "empresa": "COPERSUCAR CIA ARMAZENS GERAIS",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "1",
+    "dataEntrega": "2026-06-29",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 143,
+    "empresa": "COPERSUCAR SA",
+    "responsavel": "ANNIE ALMEIDA",
+    "grupo": "2",
+    "dataEntrega": "2026-06-29",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 144,
+    "empresa": "VIBRA ENERGIA VENC 20",
+    "responsavel": "BEATRIZ CARDOSO",
+    "grupo": "1",
+    "dataEntrega": "2025-02-05",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 145,
+    "empresa": "KARCHER",
+    "responsavel": "MICAELE ALVES",
+    "grupo": "3",
+    "dataEntrega": "2026-06-30",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 146,
+    "empresa": "SUBSEA7",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "4",
+    "dataEntrega": "2026-06-02",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 147,
+    "empresa": "SUBSEA7 - BRADESCO ONSHORE",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "4",
+    "dataEntrega": "2026-06-01",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  },
+  {
+    "id": 148,
+    "empresa": "SUBSEA7 - BRADESCO OFFSHORE",
+    "responsavel": "GABRIELA ROMERO",
+    "grupo": "4",
+    "dataEntrega": "2026-06-01",
+    "tipo": "Entregas",
+    "status": "Pendente",
+    "observacao": ""
+  }
+];
+
+</script>
+  <script>
+
+const GOOGLE_SHEETS_API_URL = ''; // Opcional: cole aqui a URL do Apps Script para carregar dados da planilha em tempo real.
+const storageKey = 'controle_entregas_v1';
+const today = new Date(); today.setHours(0,0,0,0);
+let currentDate = new Date(today.getFullYear(), today.getMonth(), 1);
+let entregas = [];
+let selectedId = null;
+const brDate = d => new Date(d + 'T00:00:00').toLocaleDateString('pt-BR');
+const iso = d => new Date(d).toISOString().slice(0,10);
+function loadLocal(){ const saved = JSON.parse(localStorage.getItem(storageKey)||'[]'); const map = new Map(saved.map(x=>[x.id,x])); return BASE_ENTREGAS.map(x=>({...x, ...(map.get(x.id)||{})})); }
+async function start(){ entregas = loadLocal(); if(GOOGLE_SHEETS_API_URL){ try{ const r = await fetch(GOOGLE_SHEETS_API_URL); const data = await r.json(); if(Array.isArray(data) && data.length) entregas = data.map((x,i)=>({...x,id:x.id||i+1,status:x.status||'Pendente'})); }catch(e){ console.warn('Não foi possível carregar Google Sheets. Usando dados locais.', e); }} initFilters(); bind(); renderAll(); }
+function save(){ localStorage.setItem(storageKey, JSON.stringify(entregas)); }
+function filtered(){ const q=document.getElementById('search').value.toLowerCase(); const resp=document.getElementById('respFilter').value; const status=document.getElementById('statusFilter').value; const grupo=document.getElementById('grupoFilter').value; return entregas.filter(e=>(!q || [e.empresa,e.responsavel,e.grupo].join(' ').toLowerCase().includes(q)) && (!resp||e.responsavel===resp) && (!status||e.status===status) && (!grupo||String(e.grupo)===grupo)); }
+function daysDiff(dateStr){ const d=new Date(dateStr+'T00:00:00'); return Math.round((d-today)/(1000*60*60*24)); }
+function deadlineClass(e){ if(e.status==='Entregue') return 'ok'; const diff=daysDiff(e.dataEntrega); if(diff<0) return 'vencido'; if(diff===0) return 'hoje'; if(diff<=3) return 'proximo'; return 'futuro'; }
+function deadlineLabel(e){ if(e.status==='Entregue') return 'Entregue'; const diff=daysDiff(e.dataEntrega); if(diff<0) return `${Math.abs(diff)} dia(s) vencido`; if(diff===0) return 'Vence hoje'; if(diff<=3) return `Faltam ${diff} dia(s)`; return 'No prazo'; }
+function initFilters(){ const resps=[...new Set(entregas.map(e=>e.responsavel).filter(Boolean))].sort(); const grupos=[...new Set(entregas.map(e=>String(e.grupo)).filter(Boolean))].sort(); document.getElementById('respFilter').innerHTML='<option value="">Todos responsáveis</option>'+resps.map(r=>`<option>${r}</option>`).join(''); document.getElementById('grupoFilter').innerHTML='<option value="">Todos grupos</option>'+grupos.map(g=>`<option>${g}</option>`).join(''); }
+function renderKpis(){ const data=entregas; document.getElementById('kpiTotal').textContent=data.length; document.getElementById('kpiVencidos').textContent=data.filter(e=>deadlineClass(e)==='vencido').length; document.getElementById('kpiHoje').textContent=data.filter(e=>deadlineClass(e)==='hoje').length; document.getElementById('kpiProx').textContent=data.filter(e=>deadlineClass(e)==='proximo').length; document.getElementById('kpiEntregues').textContent=data.filter(e=>e.status==='Entregue').length; }
+function renderCalendar(){ const cal=document.getElementById('calendar'); const y=currentDate.getFullYear(), m=currentDate.getMonth(); document.getElementById('monthTitle').textContent=currentDate.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}).replace(/^./,c=>c.toUpperCase()); cal.innerHTML=''; ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(d=>cal.innerHTML+=`<div class="dow">${d}</div>`); const first=new Date(y,m,1); const start=new Date(y,m,1-first.getDay()); for(let i=0;i<42;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const dIso=iso(d); const cls = d.getMonth()!==m?'out':''; const isToday = d.getTime()===today.getTime()?' today':''; const events=filtered().filter(e=>e.dataEntrega===dIso); cal.innerHTML += `<div class="day ${cls}${isToday}"><div class="day-num">${d.getDate()}</div>${events.slice(0,5).map(e=>`<div class="event status-${deadlineClass(e)}" onclick="openModal(${e.id})">${e.empresa}</div>`).join('')}${events.length>5?`<small>+${events.length-5} entregas</small>`:''}</div>`; } }
+function alertHtml(items, color){ if(!items.length) return '<div class="empty">Nenhum item</div>'; return items.slice(0,80).map(e=>`<div class="alert-item ${color}" onclick="openModal(${e.id})"><b>${e.empresa}</b><span>${e.responsavel} • ${brDate(e.dataEntrega)} • ${deadlineLabel(e)}</span></div>`).join(''); }
+function renderAlerts(){ const data=filtered(); document.getElementById('alertVencidos').innerHTML=alertHtml(data.filter(e=>deadlineClass(e)==='vencido').sort((a,b)=>a.dataEntrega.localeCompare(b.dataEntrega)),'red'); document.getElementById('alertHoje').innerHTML=alertHtml(data.filter(e=>deadlineClass(e)==='hoje'),'orange'); document.getElementById('alertProx').innerHTML=alertHtml(data.filter(e=>deadlineClass(e)==='proximo').sort((a,b)=>a.dataEntrega.localeCompare(b.dataEntrega)),'yellow'); document.getElementById('alertEntregues').innerHTML=alertHtml(data.filter(e=>e.status==='Entregue').slice(0,30),'green'); }
+function renderTable(){ const tbody=document.getElementById('tableBody'); tbody.innerHTML=filtered().sort((a,b)=>a.dataEntrega.localeCompare(b.dataEntrega)).map(e=>{ const c=deadlineClass(e); const color={vencido:'red',hoje:'orange',proximo:'yellow',ok:'green',futuro:'blue'}[c]; return `<tr><td><b>${e.empresa}</b></td><td>${e.responsavel}</td><td>${e.grupo}</td><td>${brDate(e.dataEntrega)}</td><td><span class="pill ${color}">${deadlineLabel(e)}</span></td><td><button class="btn secondary" onclick="openModal(${e.id})">Editar</button></td></tr>`; }).join(''); }
+function renderDashboard(){ const byResp={}; filtered().forEach(e=>{ byResp[e.responsavel]=(byResp[e.responsavel]||0)+1; }); const max=Math.max(1,...Object.values(byResp)); document.getElementById('chartResp').innerHTML=Object.entries(byResp).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>`<div class="bar"><b>${k}</b><div class="track"><div class="fill" style="width:${v/max*100}%"></div></div><span>${v}</span></div>`).join(''); const statusCounts={Vencidos:entregas.filter(e=>deadlineClass(e)==='vencido').length, Hoje:entregas.filter(e=>deadlineClass(e)==='hoje').length, Próximos:entregas.filter(e=>deadlineClass(e)==='proximo').length, Entregues:entregas.filter(e=>e.status==='Entregue').length, Futuro:entregas.filter(e=>deadlineClass(e)==='futuro').length}; const maxS=Math.max(1,...Object.values(statusCounts)); document.getElementById('chartStatus').innerHTML=Object.entries(statusCounts).map(([k,v])=>`<div class="bar"><b>${k}</b><div class="track"><div class="fill" style="width:${v/maxS*100}%"></div></div><span>${v}</span></div>`).join(''); }
+function renderAll(){ renderKpis(); renderCalendar(); renderAlerts(); renderTable(); renderDashboard(); }
+function openModal(id){ selectedId=id; const e=entregas.find(x=>x.id===id); document.getElementById('mEmpresa').value=e.empresa; document.getElementById('mResp').value=e.responsavel; document.getElementById('mData').value=e.dataEntrega; document.getElementById('mStatus').value=e.status||'Pendente'; document.getElementById('mObs').value=e.observacao||''; document.getElementById('modalBg').style.display='flex'; }
+function bind(){ document.querySelectorAll('.nav button').forEach(btn=>btn.onclick=()=>{ document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden')); document.getElementById('view-'+btn.dataset.view).classList.remove('hidden'); document.getElementById('pageTitle').textContent=btn.textContent.replace(/[📅🚨📊🔎⚙️]/g,'').trim(); }); ['search','respFilter','statusFilter','grupoFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderAll)); document.getElementById('prevMonth').onclick=()=>{currentDate.setMonth(currentDate.getMonth()-1);renderCalendar();}; document.getElementById('nextMonth').onclick=()=>{currentDate.setMonth(currentDate.getMonth()+1);renderCalendar();}; document.getElementById('todayBtn').onclick=()=>{currentDate=new Date(today.getFullYear(),today.getMonth(),1);renderCalendar();}; document.getElementById('closeModal').onclick=()=>document.getElementById('modalBg').style.display='none'; document.getElementById('saveModal').onclick=()=>{ const e=entregas.find(x=>x.id===selectedId); e.dataEntrega=document.getElementById('mData').value; e.status=document.getElementById('mStatus').value; e.observacao=document.getElementById('mObs').value; save(); document.getElementById('modalBg').style.display='none'; renderAll();}; document.getElementById('exportBtn').onclick=()=>{ const rows=[['Empresa','Responsável','Grupo','Data Entrega','Status','Observação'],...entregas.map(e=>[e.empresa,e.responsavel,e.grupo,e.dataEntrega,e.status,e.observacao||''])]; const csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\n'); const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='entregas.csv'; a.click(); } }
+start();
+
+</script>
+</body>
+</html>
